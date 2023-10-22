@@ -1,6 +1,11 @@
+using IdentityGenerator.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddDbContext<RegionalDataDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("mssql")
+        ?? throw new InvalidOperationException("'mssql' connection string is not found.")));
 
 builder.Services.AddControllersWithViews();
 
@@ -17,11 +22,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
+app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+app.SeedRegionalData();
 
 app.Run();
