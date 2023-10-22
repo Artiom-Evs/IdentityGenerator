@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ToolbarPanel } from './ToolbarPanel';
+import { InfiniteList } from './InfiniteList';
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -16,11 +17,26 @@ export class Home extends Component {
             loading: true
         };
 
+        this.getFakeData = this.getFakeData.bind(this);
         this.onButtonClick = this.onButtonClick.bind(this);
     }
 
     componentDidMount() {
         this.populateFakeData();
+    }
+
+    buildUrl() {
+        const { region, errorsCount, itemsCount, seedNumber } = this.state;
+        let url = "/api/fakedata";
+        url += `?region=${region}&errorsCount=${errorsCount}&itemsCount=${itemsCount}&seedNumber=${seedNumber}`;
+        return url;
+    }
+
+    getFakeData = async () => {
+        const url = this.buildUrl();
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
     }
 
     onButtonClick = (e) => {
@@ -37,35 +53,18 @@ export class Home extends Component {
         );
     }
 
-    static renderFakeDataTable(items) {
+    renderFakeData() {
         return (
-            <table className="table table-striped" aria-labelledby="tableLabel">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {items.map((item, i) =>
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{item.name}</td>
-                            <td>{item.address}</td>
-                            <td>{item.phone}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+            <InfiniteList
+                data={this.state.items}
+                getMore={this.getFakeData} />
         );
     }
 
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : Home.renderFakeDataTable(this.state.items);
+            : this.renderFakeData();
 
         return (
             <div>
@@ -77,8 +76,7 @@ export class Home extends Component {
     }
 
     async populateFakeData() {
-        const response = await fetch('/api/fakedata');
-        const data = await response.json();
+        const data = await this.getFakeData();
         this.setState({ items: data, loading: false });
     }
 }

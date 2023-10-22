@@ -1,5 +1,4 @@
 ﻿using IdentityGenerator.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityGenerator.Controllers;
@@ -9,13 +8,8 @@ namespace IdentityGenerator.Controllers;
 public class FakeDataController : ControllerBase
 {
     [HttpGet]
-    public IEnumerable<FakeDataItem> Get()
+    public IEnumerable<FakeDataItem> Get(string region, int errorsCount, int itemsCount, int seedNumber)
     {
-        return new FakeDataItem[]
-        {
-            new() { Name = "Some Name", Address = "Some address", Phone = "123 456 789 098" },
-            new() { Name = "Some Name", Address = "Some address", Phone = "123 456 789 098" },
-            new() { Name = "Some Name", Address = "Some address", Phone = "123 456 789 098" }
-        };
+        return Enumerable.Repeat(new FakeDataItem() { Name = "Some Name", Address = "Some address", Phone = "123 456 789 098" }, itemsCount);
     }
 }
