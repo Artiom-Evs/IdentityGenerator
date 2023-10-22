@@ -1,4 +1,5 @@
 using IdentityGenerator.Data;
+using IdentityGenerator.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ builder.Services.AddDbContext<RegionalDataDbContext>(options =>
         ?? throw new InvalidOperationException("'mssql' connection string is not found.")));
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IGenerationProvider, BYGenerationProvider>();
 
 var app = builder.Build();
 

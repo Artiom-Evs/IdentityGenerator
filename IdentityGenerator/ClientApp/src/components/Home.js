@@ -26,9 +26,9 @@ export class Home extends Component {
     }
 
     buildUrl() {
-        const { region, errorsCount, itemsCount, seedNumber } = this.state;
+        const { region, items, itemsCount, errorsCount, seedNumber } = this.state;
         let url = "/api/fakedata";
-        url += `?region=${region}&errorsCount=${errorsCount}&itemsCount=${itemsCount}&seedNumber=${seedNumber}`;
+        url += `?region=${region}&startItem${items.length}&itemsCount=${itemsCount}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
         return url;
     }
 
