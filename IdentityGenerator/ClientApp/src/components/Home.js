@@ -1,15 +1,40 @@
 import React, { Component } from 'react';
+import { ToolbarPanel } from './ToolbarPanel';
 
 export class Home extends Component {
     static displayName = Home.name;
+    regions = ["BY"];
 
     constructor(props) {
         super(props);
-        this.state = { items: [], loading: true };
+        this.state = {
+            items: [],
+            region: this.regions[0],
+            errorsCount: 0,
+            itemsCount: 10,
+            seedNumber: 0,
+            loading: true
+        };
+
+        this.onButtonClick = this.onButtonClick.bind(this);
     }
 
     componentDidMount() {
         this.populateFakeData();
+    }
+
+    onButtonClick = (e) => {
+        this.setState({ loading: true, ...e });
+        this.populateFakeData();
+    }
+
+    renderToolbar() {
+        return (
+            <ToolbarPanel
+                regions={this.regions}
+                onButtonClick={(e) => this.onButtonClick(e)}
+            />
+        );
     }
 
     static renderFakeDataTable(items) {
@@ -40,11 +65,12 @@ export class Home extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : Home.renderFakeDataTable(this.state.forecasts);
+            : Home.renderFakeDataTable(this.state.items);
 
         return (
             <div>
-                <h1 id="tableLabel">Fake data</h1>
+                <h1>Fake data</h1>
+                {this.renderToolbar()}
                 {contents}
             </div>
         );
