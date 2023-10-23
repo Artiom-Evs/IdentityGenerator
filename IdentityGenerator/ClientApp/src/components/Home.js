@@ -5,12 +5,12 @@ import { InfiniteList } from './InfiniteList';
 export class Home extends Component {
     static displayName = Home.name;
     regions = ["BY"];
+    itemsLoaded = 0;
 
     constructor(props) {
         super(props);
         this.state = {
             items: [],
-            itemsLoaded: 0,
             region: this.regions[0],
             errorsCount: 0,
             itemsCount: 10,
@@ -29,16 +29,17 @@ export class Home extends Component {
     }
 
     buildUrl() {
-        const { region, itemsLoaded, itemsCount, errorsCount, seedNumber } = this.state;
+        const { region, itemsCount, errorsCount, seedNumber } = this.state;
         let url = "/api/fakedata";
-        url += `?region=${region}&startItem=${itemsLoaded}&itemsCount=${itemsCount}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
+        alert(">> bu" + this.itemsLoaded);
+        url += `?region=${region}&startItem=${this.itemsLoaded}&itemsCount=${itemsCount}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
         return url;
     }
 
     buildDownloadUrl() {
-        const { region, itemsLoaded, errorsCount, seedNumber } = this.state;
+        const { region, errorsCount, seedNumber } = this.state;
         let url = "/api/fakedata/csv";
-        url += `?region=${region}&itemsCount=${itemsLoaded}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
+        url += `?region=${region}&itemsCount=${this.itemsLoaded}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
         return url;
     }
 
@@ -50,11 +51,11 @@ export class Home extends Component {
     }
 
     onItemsCountChanged = (e) => {
-        this.setState({ itemsLoaded: e });
+        this.itemsLoaded = e;
     }
 
     onButtonClick = (e) => {
-        this.setState({ loading: true, ...e });
+        this.setState({ items: [], loading: true, ...e });
         this.populateFakeData();
     }
 
@@ -101,7 +102,9 @@ export class Home extends Component {
     }
 
     async populateFakeData() {
+        this.itemsLoaded = 0;
         const data = await this.getFakeData();
+        this.itemsLoaded = data.length;
         this.setState({ items: data, itemsLoaded: data.length, loading: false });
     }
 }
