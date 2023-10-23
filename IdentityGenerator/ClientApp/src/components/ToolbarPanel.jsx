@@ -1,4 +1,4 @@
-﻿import { Component } from "react";
+import { Component } from "react";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Slider, TextField, Typography } from "@mui/material";
 
 export class ToolbarPanel extends Component {
