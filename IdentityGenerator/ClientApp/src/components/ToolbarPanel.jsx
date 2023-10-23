@@ -14,6 +14,7 @@ export class ToolbarPanel extends Component {
 
         this.regions = props.regions;
         this.onButtonClick = props.onButtonClick;
+        this.onDownloadClick = props.onDownloadClick;
 
         this.state = {
             region: this.regions[0],
@@ -138,6 +139,13 @@ export class ToolbarPanel extends Component {
                         variant="outlined"
                         onClick={this.onRandomClick}
                     >Random</Button>
+                </Grid>
+
+                <Grid item Item>
+                    <Button
+                        variant="outlined"
+                        onClick={this.onDownloadClick}
+                    >Download as CSV</Button>
                 </Grid>
             </Grid>
         )

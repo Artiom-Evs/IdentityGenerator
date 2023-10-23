@@ -21,6 +21,7 @@ export class Home extends Component {
         this.getFakeData = this.getFakeData.bind(this);
         this.onItemsCountChanged = this.onItemsCountChanged.bind(this);
         this.onButtonClick = this.onButtonClick.bind(this);
+        this.onDownloadClick = this.onDownloadClick.bind(this);
     }
 
     componentDidMount() {
@@ -31,6 +32,13 @@ export class Home extends Component {
         const { region, itemsLoaded, itemsCount, errorsCount, seedNumber } = this.state;
         let url = "/api/fakedata";
         url += `?region=${region}&startItem=${itemsLoaded}&itemsCount=${itemsCount}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
+        return url;
+    }
+
+    buildDownloadUrl() {
+        const { region, itemsLoaded, errorsCount, seedNumber } = this.state;
+        let url = "/api/fakedata/csv";
+        url += `?region=${region}&itemsCount=${itemsLoaded}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
         return url;
     }
 
@@ -50,11 +58,21 @@ export class Home extends Component {
         this.populateFakeData();
     }
 
+    onDownloadClick = (e) => {
+        const link = document.createElement('a');
+        link.href = this.buildDownloadUrl();
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+    }
+
     renderToolbar() {
         return (
             <ToolbarPanel
                 regions={this.regions}
-                onButtonClick={(e) => this.onButtonClick(e)} />
+                onButtonClick={(e) => this.onButtonClick(e)}
+                onDownloadClick={this.onDownloadClick}
+            />
         );
     }
 
