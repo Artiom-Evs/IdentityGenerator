@@ -1,19 +1,20 @@
 ﻿import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const InfiniteList = ({ data, getMore }) => {
-    const [items, setPosts] = useState(data);
+export const InfiniteList = ({ data, getMore, onItemsCountChanged }) => {
+    const [items, setItems] = useState(data);
     
-    const getMorePost = async () => {
-        const newPosts = await getMore();
-        setPosts((post) => [...post, ...newPosts]);
+    const getMoreItems = async () => {
+        const newItems = await getMore();
+        onItemsCountChanged(items.length + newItems.length)
+        setItems((items) => [...items, ...newItems]);
     };
 
     return (
         <InfiniteScroll
             height={450}
             dataLength={items.length}
-            next={getMorePost}
+            next={getMoreItems}
             hasMore={true}
             loader={<h3> Loading...</h3>}
         >

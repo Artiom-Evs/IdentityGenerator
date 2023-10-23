@@ -49,7 +49,7 @@ public class BYGenerationProvider : IGenerationProvider
     
     private string FormatAddress(Address address, Random rnd)
     {
-        string postcode = string.IsNullOrEmpty(address.Postcode) && rnd.Next(0, 2) == 0 ? "" : $", {address.Postcode}";
+        string postcode = string.IsNullOrWhiteSpace(address.Postcode) || rnd.Next(0, 2) == 0 ? "" : $", {address.Postcode}";
         string country = rnd.Next(0, 4) switch
         {
             0 => "BY",
@@ -57,13 +57,13 @@ public class BYGenerationProvider : IGenerationProvider
             2 => "Беларусь",
             _ => "Рэспубліка Беларусь"
         };
-        string region = string.IsNullOrEmpty(address.Region) && rnd.Next(0, 2) == 0 ? "" : $", {address.Region}";
-        string District = string.IsNullOrEmpty(address.District) && rnd.Next(0, 2) == 0 ? "" : $", {address.District}";
+        string region = string.IsNullOrWhiteSpace(address.Region) || rnd.Next(0, 2) == 0 ? "" : $", {address.Region}";
+        string District = string.IsNullOrWhiteSpace(address.District) || rnd.Next(0, 2) == 0 ? "" : $", {address.District}";
 
         return rnd.Next(0, 2) switch
         {
             0 => $"{address.Street} {address.Number}, {address.City}{District}{region}, {country}{postcode}",
-            _ => $"{address.City}, {address.Street} {address.Number}, {District}{region}{postcode}"
+            _ => $"{address.City}, {address.Street} {address.Number}{District}{region}{postcode}"
         };
     }
 

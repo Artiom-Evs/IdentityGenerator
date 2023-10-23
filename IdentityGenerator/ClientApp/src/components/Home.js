@@ -10,6 +10,7 @@ export class Home extends Component {
         super(props);
         this.state = {
             items: [],
+            itemsLoaded: 0,
             region: this.regions[0],
             errorsCount: 0,
             itemsCount: 10,
@@ -18,6 +19,7 @@ export class Home extends Component {
         };
 
         this.getFakeData = this.getFakeData.bind(this);
+        this.onItemsCountChanged = this.onItemsCountChanged.bind(this);
         this.onButtonClick = this.onButtonClick.bind(this);
     }
 
@@ -26,9 +28,9 @@ export class Home extends Component {
     }
 
     buildUrl() {
-        const { region, items, itemsCount, errorsCount, seedNumber } = this.state;
+        const { region, itemsLoaded, itemsCount, errorsCount, seedNumber } = this.state;
         let url = "/api/fakedata";
-        url += `?region=${region}&startItem${items.length}&itemsCount=${itemsCount}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
+        url += `?region=${region}&startItem=${itemsLoaded}&itemsCount=${itemsCount}&errorsCount=${errorsCount}&seedNumber=${seedNumber}`;
         return url;
     }
 
@@ -37,6 +39,10 @@ export class Home extends Component {
         const response = await fetch(url);
         const data = await response.json();
         return data;
+    }
+
+    onItemsCountChanged = (e) => {
+        this.setState({ itemsLoaded: e });
     }
 
     onButtonClick = (e) => {
@@ -48,8 +54,7 @@ export class Home extends Component {
         return (
             <ToolbarPanel
                 regions={this.regions}
-                onButtonClick={(e) => this.onButtonClick(e)}
-            />
+                onButtonClick={(e) => this.onButtonClick(e)} />
         );
     }
 
@@ -57,7 +62,9 @@ export class Home extends Component {
         return (
             <InfiniteList
                 data={this.state.items}
-                getMore={this.getFakeData} />
+                getMore={this.getFakeData}
+                onItemsCountChanged={this.onItemsCountChanged}
+            />
         );
     }
 
@@ -77,6 +84,6 @@ export class Home extends Component {
 
     async populateFakeData() {
         const data = await this.getFakeData();
-        this.setState({ items: data, loading: false });
+        this.setState({ items: data, itemsLoaded: data.length, loading: false });
     }
 }
