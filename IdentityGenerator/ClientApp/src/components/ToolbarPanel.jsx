@@ -1,5 +1,5 @@
 ﻿import { Component } from "react";
-import { Button, FormControl, Grid, Input, InputLabel, MenuItem, Select, Slider, TextField, Typography } from "@mui/material";
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Slider, TextField, Typography } from "@mui/material";
 
 export class ToolbarPanel extends Component {
     static displayName = ToolbarPanel.name;
@@ -32,8 +32,8 @@ export class ToolbarPanel extends Component {
     }
 
     onSliderInputChange = (e) => {
-        var value = parseInt(e.target.value);
-        
+        let value = parseInt(e.target.value);
+
         if (e.target.value === "") {
             value = 0;
         }
@@ -47,12 +47,12 @@ export class ToolbarPanel extends Component {
             value = 1000;
         }
 
-        e.target.value  = value;
+        e.target.value = value;
         this.setState({ errorsCount: value });
     }
 
     onSeedChanged = (e) => {
-        var value = parseInt(e.target.value);
+        let value = parseInt(e.target.value);
 
         if (e.target.value === "") {
             value = 0;
@@ -91,25 +91,25 @@ export class ToolbarPanel extends Component {
                             value={region}
                             onChange={this.onCountryChange}
                         >
-                            {this.regions.map((r, i) => 
+                            {this.regions.map((r, i) =>
                                 <MenuItem key={i} value={r}>{r}</MenuItem>
                             )}
                         </Select>
                     </FormControl>
                 </Grid>
-                
+
                 <Grid item minWidth={240}>
                     <Typography id="input-slider">Errors count</Typography>
                     <Grid container spacing alignItems="center">
                         <Grid item xs={8}>
-                            <Slider 
-                                value={ ~~(errorsCount / 10) }
+                            <Slider
+                                value={~~(errorsCount / 10)}
                                 onChange={this.onSliderChange}
                                 aria-labelledby="input-slider"
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField 
+                            <TextField
                                 type="number"
                                 variant="standard"
                                 value={errorsCount}
@@ -125,8 +125,8 @@ export class ToolbarPanel extends Component {
 
                 <Grid item>
                     <InputLabel id="input-seed-label">Seed number</InputLabel >
-                    <TextField 
-                        labelId="input-seed-label" 
+                    <TextField
+                        labelId="input-seed-label"
                         variant="standard"
                         type="number"
                         value={seedNumber}
@@ -135,7 +135,7 @@ export class ToolbarPanel extends Component {
                 </Grid>
 
                 <Grid item Item>
-                    <Button  
+                    <Button
                         variant="outlined"
                         onClick={this.onRandomClick}
                     >Random</Button>
