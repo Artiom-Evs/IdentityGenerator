@@ -56,7 +56,8 @@ public class FakeDataController : ControllerBase
         using var csv = new CsvWriter(writer, csvConfig);
         
         csv.WriteRecords(items);
-        
+        writer.Flush();
+
         return File(stream.ToArray(), "text/csv", "fake_data.csv");
     }
 
